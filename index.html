@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clarity in Complexity | Thomas Nüesch</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0d1f2d;
+    --paper: #f4f1eb;
+    --deep: #0a1929;
+    --teal: #1a7a6e;
+    --teal-light: #2aaf9f;
+    --gold: #c8a96e;
+    --muted: #8a9ba8;
+    --line: rgba(13,31,45,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    mix-blend-mode: normal;
+    background: rgba(244,241,235,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-cta {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal);
+    padding-bottom: 2px;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.6; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--deep);
+    padding: 140px 64px 80px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(26,122,110,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 80% 20%, rgba(200,169,110,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 5.5vw, 80px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: #fff;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.55);
+    max-width: 360px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--teal);
+    color: #fff;
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 16px 28px;
+    border-radius: 2px;
+    transition: background 0.25s, gap 0.25s;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+    align-self: flex-start;
+  }
+  .hero-btn:hover { background: var(--teal-light); gap: 18px; }
+  .hero-btn svg { width: 16px; height: 16px; }
+
+  .hero-right {
+    background: var(--paper);
+    padding: 140px 64px 80px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-right::before {
+    content: 'KI';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 320px;
+    font-weight: 300;
+    color: rgba(13,31,45,0.04);
+    position: absolute;
+    bottom: -40px;
+    right: -20px;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+
+  .pillar {
+    border-top: 1px solid var(--line);
+    padding: 20px 0;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 16px;
+    align-items: start;
+    transition: background 0.2s;
+  }
+  .pillar:last-child { border-bottom: 1px solid var(--line); }
+
+  .pillar-num {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    padding-top: 3px;
+  }
+
+  .pillar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .pillar-desc {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 100px 48px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--teal);
+  }
+
+  /* ── AUSGANGSPUNKT ── */
+  .ausgangspunkt {
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .ausgangspunkt-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 3vw, 52px);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 28px;
+    color: var(--ink);
+  }
+
+  .ausgangspunkt-text p {
+    font-size: 13px;
+    line-height: 1.9;
+    color: #4a5a6a;
+    margin-bottom: 16px;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .stat-box {
+    background: var(--deep);
+    color: #fff;
+    padding: 36px 28px;
+  }
+
+  .stat-box:nth-child(2) { background: var(--teal); }
+  .stat-box:nth-child(3) { background: #1a3050; }
+  .stat-box:nth-child(4) { background: #0e2438; }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+
+  /* ── WIRKMODELL ── */
+  .wirkmodell {
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wirkmodell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(26,122,110,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .wirkmodell .section-label { color: var(--teal-light); }
+  .wirkmodell .section-label::after { background: var(--teal-light); }
+
+  .wirkmodell-header {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 3vw, 52px);
+    font-weight: 300;
+    color: #fff;
+    margin-bottom: 16px;
+    max-width: 600px;
+  }
+
+  .wirkmodell-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    max-width: 500px;
+    line-height: 1.8;
+    margin-bottom: 72px;
+  }
+
+  .wirk-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .wirk-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 44px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .wirk-card:hover { background: rgba(255,255,255,0.07); }
+
+  .wirk-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--teal);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .wirk-card:hover::before { transform: scaleX(1); }
+
+  .wirk-icon {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--teal-light);
+    margin-bottom: 24px;
+    line-height: 1;
+  }
+
+  .wirk-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  .wirk-desc {
+    font-size: 12px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ── ENTWICKLUNGSLOGIK ── */
+  .entwicklung {
+    background: var(--paper);
+  }
+
+  .entwicklung h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 3vw, 52px);
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  .entwicklung-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 64px;
+    max-width: 500px;
+    line-height: 1.8;
+  }
+
+  .stufen {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--line);
+  }
+
+  .stufe {
+    padding: 44px 32px;
+    border-right: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .stufe:last-child { border-right: none; }
+  .stufe:hover { background: rgba(13,31,45,0.03); }
+
+  .stufe-step {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .stufe-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .stufe-desc {
+    font-size: 11px;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  .stufe-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: var(--teal);
+  }
+  .stufe:nth-child(1) .stufe-bar { width: 25%; }
+  .stufe:nth-child(2) .stufe-bar { width: 50%; }
+  .stufe:nth-child(3) .stufe-bar { width: 75%; }
+  .stufe:nth-child(4) .stufe-bar { width: 100%; background: var(--gold); }
+
+  /* ── INTERVENTIONEN ── */
+  .interventionen {
+    background: #0e2438;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .interventionen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 100% 50%, rgba(26,122,110,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .interventionen .section-label { color: var(--teal-light); }
+  .interventionen .section-label::after { background: var(--teal-light); }
+
+  .interventionen-intro h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 2.5vw, 44px);
+    font-weight: 300;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .interventionen-intro p {
+    font-size: 12px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .inter-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .inter-item {
+    background: rgba(255,255,255,0.04);
+    border-left: 2px solid transparent;
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 32px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .inter-item:hover {
+    border-color: var(--teal);
+    background: rgba(255,255,255,0.07);
+  }
+
+  .inter-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--gold);
+    padding-top: 2px;
+  }
+
+  .inter-text {
+    font-size: 12px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.55);
+  }
+
+  /* ── ABGRENZUNG ── */
+  .abgrenzung {
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .abgrenzung-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 3vw, 52px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+
+  .not-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .not-list li {
+    font-size: 12px;
+    color: #4a5a6a;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.6;
+  }
+
+  .not-list li::before {
+    content: '×';
+    color: #c0392b;
+    font-size: 18px;
+    font-weight: 300;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+  }
+
+  .yes-item {
+    font-size: 12px;
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 400;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+  }
+
+  .yes-item::before {
+    content: '✓';
+    font-size: 18px;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+  }
+
+  .abgrenzung-visual {
+    background: var(--deep);
+    padding: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .abgrenzung-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(26,122,110,0.15) 0%, transparent 70%);
+  }
+
+  .abgrenzung-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+  }
+
+  .abgrenzung-quote::before {
+    content: '"';
+    font-size: 80px;
+    color: var(--teal);
+    line-height: 0.5;
+    display: block;
+    margin-bottom: 20px;
+    font-style: normal;
+  }
+
+  /* ── PROFIL ── */
+  .profil {
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .profil h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 3vw, 52px);
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+
+  .profil-bio {
+    font-size: 13px;
+    line-height: 1.9;
+    color: #4a5a6a;
+    margin-bottom: 36px;
+  }
+
+  .credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .credential {
+    border-top: 1px solid var(--line);
+    padding: 18px 0;
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .credential:last-child { border-bottom: 1px solid var(--line); }
+
+  .cred-icon {
+    font-size: 18px;
+    margin-top: 1px;
+  }
+
+  .cred-text {
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .cred-sub {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .schnittstellten {
+    background: rgba(13,31,45,0.04);
+    border: 1px solid var(--line);
+    padding: 36px;
+  }
+
+  .schnittstellen-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 20px;
+  }
+
+  .tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag-chip {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(13,31,45,0.2);
+    padding: 6px 14px;
+    color: var(--ink);
+    border-radius: 1px;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+  .tag-chip:hover {
+    background: var(--teal);
+    color: #fff;
+    border-color: var(--teal);
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--deep);
+    text-align: center;
+    padding: 120px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 100%, rgba(26,122,110,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 20%, rgba(200,169,110,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cta-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 28px;
+    display: block;
+  }
+
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 300;
+    color: #fff;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .cta-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 20px 40px;
+    border-radius: 1px;
+    transition: background 0.3s, border-color 0.3s, gap 0.25s;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-btn:hover {
+    background: var(--teal);
+    border-color: var(--teal);
+    gap: 20px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #060f1a;
+    color: rgba(255,255,255,0.3);
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  footer a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  footer a:hover { color: var(--teal-light); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 120px 28px 60px; min-height: 60vh; }
+    .hero-right { padding: 48px 28px 60px; }
+
+    section { padding: 72px 24px; }
+
+    .ausgangspunkt,
+    .abgrenzung,
+    .profil,
+    .interventionen { grid-template-columns: 1fr; gap: 40px; }
+
+    .wirk-cards,
+    .stufen { grid-template-columns: 1fr; }
+
+    .stufe { border-right: none; border-bottom: 1px solid var(--line); }
+    .stufe:last-child { border-bottom: none; }
+
+    .inter-item { grid-template-columns: 1fr; gap: 8px; }
+
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+
+    .hero-right::before { font-size: 180px; }
+
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Thomas Nüesch</a>
+  <a class="nav-cta" href="mailto:thomas.nueesch@wigasoft.ch">Erstgespräch →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">KI · Organisation · KMU · Führung · Digitale Gesundheit</div>
+    <h1 class="hero-title">Clarity<br>in <em>Com&shy;plexity</em></h1>
+    <p class="hero-sub">
+      KI nicht als Werkzeug, sondern als Denkpartner.<br>
+      Integriert in Entscheidung, Wissen und Führung.
+    </p>
+    <a class="hero-btn" href="mailto:thomas.nueesch@wigasoft.ch">
+      Erstgespräch anfragen
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-pillars">
+      <div class="pillar">
+        <div class="pillar-num">01 —</div>
+        <div>
+          <div class="pillar-title">Strukturierung</div>
+          <div class="pillar-desc">Ordnung von Informationen, Wissen und Prozessen</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02 —</div>
+        <div>
+          <div class="pillar-title">Spiegelung</div>
+          <div class="pillar-desc">Sichtbarmachung von Annahmen und blinden Flecken</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03 —</div>
+        <div>
+          <div class="pillar-title">Resonanz</div>
+          <div class="pillar-desc">Förderung von Reflexion und bewusster Auseinandersetzung</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUSGANGSPUNKT -->
+<section class="ausgangspunkt reveal">
+  <div class="ausgangspunkt-text">
+    <div class="section-label">Ausgangspunkt</div>
+    <h2>Entscheidungsdruck<br>trifft Informationsflut.</h2>
+    <p>
+      Organisationen arbeiten unter zunehmendem Entscheidungsdruck, wachsender Komplexität und hoher Informationsdichte.
+    </p>
+    <p>
+      KI wird häufig primär zur Effizienzsteigerung eingesetzt — der Effekt bleibt begrenzt, solange sie nicht in Entscheidungsprozesse, Wissensarbeit und Führung integriert wird.
+    </p>
+  </div>
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Entwicklungs&shy;stufen</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Wirk&shy;dimensionen</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Interventions&shy;felder</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Organisations&shy;potenzial</div>
+    </div>
+  </div>
+</section>
+
+<!-- WIRKMODELL -->
+<section class="wirkmodell reveal">
+  <div class="section-label">Wirkmodell</div>
+  <div class="wirkmodell-header">KI wirkt nicht über Technologie allein.</div>
+  <p class="wirkmodell-sub">
+    Wirkung entsteht über die Funktion von KI im Denken und Handeln von Organisationen.
+  </p>
+  <div class="wirk-cards">
+    <div class="wirk-card">
+      <div class="wirk-icon">①</div>
+      <div class="wirk-title">Strukturierung</div>
+      <p class="wirk-desc">Ordnung von Informationen, Wissen und Prozessen. Reduktion von Komplexität und bessere Nachvollziehbarkeit von Zusammenhängen.</p>
+    </div>
+    <div class="wirk-card">
+      <div class="wirk-icon">②</div>
+      <div class="wirk-title">Spiegelung</div>
+      <p class="wirk-desc">Sichtbarmachung von Argumentationslogiken, Annahmen und blinden Flecken. Verbesserung der Entscheidungsqualität.</p>
+    </div>
+    <div class="wirk-card">
+      <div class="wirk-icon">③</div>
+      <div class="wirk-title">Resonanz</div>
+      <p class="wirk-desc">Förderung von Reflexion, Verlangsamung und bewusster Auseinandersetzung. Grundlage für Entwicklung von Führung und Organisation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ENTWICKLUNGSLOGIK -->
+<section class="entwicklung reveal">
+  <div class="section-label">Entwicklungslogik</div>
+  <h2>Vier Stufen der<br>KI-Integration.</h2>
+  <p class="entwicklung-sub">Organisationen entwickeln ihre KI-Nutzung entlang eines klaren Reifegradmodells.</p>
+  <div class="stufen">
+    <div class="stufe">
+      <div class="stufe-step">Stufe 01</div>
+      <div class="stufe-title">Instrumental</div>
+      <p class="stufe-desc">Fokus auf Effizienz und Automatisierung einzelner Prozesse.</p>
+      <div class="stufe-bar"></div>
+    </div>
+    <div class="stufe">
+      <div class="stufe-step">Stufe 02</div>
+      <div class="stufe-title">Kollaborativ</div>
+      <p class="stufe-desc">Unterstützung von Zusammenarbeit und Ideenentwicklung im Team.</p>
+      <div class="stufe-bar"></div>
+    </div>
+    <div class="stufe">
+      <div class="stufe-step">Stufe 03</div>
+      <div class="stufe-title">Reflexiv</div>
+      <p class="stufe-desc">Fokus auf Klarheit, Entscheidungsqualität und strukturiertes Denken.</p>
+      <div class="stufe-bar"></div>
+    </div>
+    <div class="stufe">
+      <div class="stufe-step">Stufe 04</div>
+      <div class="stufe-title">Transformativ</div>
+      <p class="stufe-desc">Integration in Kultur, Lernen und organisationale Entwicklung.</p>
+      <div class="stufe-bar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERVENTIONEN -->
+<section class="interventionen reveal">
+  <div>
+    <div class="section-label">Interventionslogik</div>
+    <h2 class="interventionen-intro" style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,2.5vw,44px);font-weight:300;color:#fff;line-height:1.15;margin-bottom:20px;">Integriert.<br>Entlang drei<br>Dimensionen.</h2>
+    <p style="font-size:12px;line-height:1.9;color:rgba(255,255,255,0.45);">Die Entwicklung erfolgt nicht isoliert, sondern integriert entlang von Organisation, Wissen und Führung.</p>
+  </div>
+  <div class="inter-items">
+    <div class="inter-item">
+      <div class="inter-label">Organisation</div>
+      <p class="inter-text">Anpassung von Strukturen, Prozessen und Entscheidungslogiken zur nachhaltigen Integration von KI in den Organisationsalltag.</p>
+    </div>
+    <div class="inter-item">
+      <div class="inter-label">Wissen</div>
+      <p class="inter-text">Strukturierung, Verfügbarkeit und Nutzung von organisationalem Wissen — unabhängig von Einzelpersonen und flüchtigen Erfahrungen.</p>
+    </div>
+    <div class="inter-item">
+      <div class="inter-label">Mensch &amp; Führung</div>
+      <p class="inter-text">Entwicklung von Reflexionsfähigkeit, Umgang mit Unsicherheit und bewusstem, souveränem Einsatz von KI durch Führungspersonen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABGRENZUNG -->
+<section class="abgrenzung reveal">
+  <div>
+    <div class="section-label">Abgrenzung</div>
+    <h2>Was dieser<br>Ansatz nicht ist.</h2>
+    <ul class="not-list">
+      <li>Keine reine Tool-Einführung ohne Kontext</li>
+      <li>Keine isolierten Pilotprojekte ohne Anschluss</li>
+      <li>Kein Fokus auf Automatisierung als Selbstzweck</li>
+    </ul>
+    <div class="yes-item">
+      Fokus auf nachhaltige Integration und messbarer Wirkung
+    </div>
+  </div>
+  <div class="abgrenzung-visual">
+    <div class="abgrenzung-quote">
+      Ziel ist nicht die Nutzung von KI als Werkzeug, sondern ihre Integration in Denken, Entscheiden und organisationale Praxis.
+    </div>
+  </div>
+</section>
+
+<!-- PROFIL -->
+<section class="profil reveal">
+  <div>
+    <div class="section-label">Profil</div>
+    <h2>Thomas<br>Nüesch</h2>
+    <p class="profil-bio">
+      Thomas Nüesch arbeitet an der Schnittstelle von Gesundheitswesen, IT, Softwareeinführung, Projektleitung, Führung und organisationaler Entwicklung.
+    </p>
+    <div class="credentials">
+      <div class="credential">
+        <div class="cred-icon">◆</div>
+        <div>
+          <div class="cred-text">Bachelor of Science in Nursing</div>
+          <div class="cred-sub">Pflegewissenschaft &amp; klinische Praxis</div>
+        </div>
+      </div>
+      <div class="credential">
+        <div class="cred-icon">◆</div>
+        <div>
+          <div class="cred-text">Master of Science in ICT in Healthcare</div>
+          <div class="cred-sub">Digitale Gesundheitsversorgung &amp; IT-Systeme</div>
+        </div>
+      </div>
+      <div class="credential">
+        <div class="cred-icon">◆</div>
+        <div>
+          <div class="cred-text">CAS KI in der Organisation</div>
+          <div class="cred-sub">ZHAW — Zürcher Hochschule für Angewandte Wissenschaften</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="schnittstellten">
+      <div class="schnittstellen-label">Schnittstellen</div>
+      <div class="tags-grid">
+        <span class="tag-chip">Gesundheitswesen</span>
+        <span class="tag-chip">IT &amp; Software</span>
+        <span class="tag-chip">Projektleitung</span>
+        <span class="tag-chip">Führung</span>
+        <span class="tag-chip">KI-Integration</span>
+        <span class="tag-chip">Wissensmanagement</span>
+        <span class="tag-chip">Organisationsentwicklung</span>
+        <span class="tag-chip">KMU</span>
+        <span class="tag-chip">Digitale Transformation</span>
+        <span class="tag-chip">Entscheidungsqualität</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <span class="cta-label">Nächster Schritt</span>
+  <h2 class="cta-title">Wo steht<br>Ihre <em>Organisation</em>?</h2>
+  <p class="cta-desc">
+    Ausgangspunkt ist die Klärung des aktuellen Zustands, der organisatorischen Voraussetzungen und der realistischen Entwicklungsschritte.
+  </p>
+  <a class="cta-btn" href="mailto:thomas.nueesch@wigasoft.ch">
+    Erstgespräch anfragen
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Thomas Nüesch · Clarity in Complexity</span>
+  <a href="mailto:thomas.nueesch@wigasoft.ch">thomas.nueesch@wigasoft.ch</a>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+
+</body>
+</html>
